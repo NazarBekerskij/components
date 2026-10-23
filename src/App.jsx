@@ -1,126 +1,90 @@
-// import { Button } from './Button/Button'
-// import { Message } from './components/Message/Message'
-// import { Item } from './components/Item/Item'
+import { Component } from 'react'
 import './App.css'
-import { Item } from './components/Item/Item';
-import { List } from './List/List';
 
-const cars = [
-  {
-    id: 1,
-    brand: "Toyota",
-    model: "Camry",
-    year: 2022,
-    color: "White",
-    mileage: 28000,
-    price: 29000,
-  },
-  {
-    id: 2,
-    brand: "BMW",
-    model: "X5",
-    year: 2020,
-    color: "Black",
-    mileage: 65000,
-    price: 48000,
-  },
-  {
-    id: 3,
-    brand: "Audi",
-    model: "A4",
-    year: 2018,
-    color: "Gray",
-    mileage: 92000,
-    price: 23000,
-  },
-  {
-    id: 4,
-    brand: "Tesla",
-    model: "Model 3",
-    year: 2023,
-    color: "Red",
-    mileage: 12000,
-    price: 42000,
-  },
-  {
-    id: 5,
-    brand: "Honda",
-    model: "Civic",
-    year: 2017,
-    color: "Blue",
-    mileage: 110000,
-    price: 17000,
-  },
-  {
-    id: 6,
-    brand: "Mercedes-Benz",
-    model: "C-Class",
-    year: 2021,
-    color: "Silver",
-    mileage: 38000,
-    price: 45000,
-  },
-  {
-    id: 7,
-    brand: "Ford",
-    model: "Focus",
-    year: 2015,
-    color: "White",
-    mileage: 145000,
-    price: 9000,
-  },
-  {
-    id: 8,
-    brand: "Volkswagen",
-    model: "Golf",
-    year: 2019,
-    color: "Green",
-    mileage: 56000,
-    price: 19500,
-  },
-  {
-    id: 9,
-    brand: "Hyundai",
-    model: "Tucson",
-    year: 2024,
-    color: "Black",
-    mileage: 5000,
-    price: 35000,
-  },
-  {
-    id: 10,
-    brand: "Nissan",
-    model: "Qashqai",
-    year: 2016,
-    color: "Brown",
-    mileage: 132000,
-    price: 14000,
-  },
-];
+import { nanoid } from 'nanoid'
 
-function App() {
+import Title from './components/Title/Title'
+import Form from './components/Form/Form'
+import ProductList from './components/ProductList/ProductList'
 
-  const newCars = cars
-    .filter((car) => car.year >= 2020)
-    .sort((a, b) => a.brand.localeCompare(b.brand));
-  // const handleClick  = () => {
-  //   console.log("добрий день");
-  // }
-
-  return (
-    <>
-      {/* <Item name="Назар"/>
-      <Message text="Hello World"/>
-      <Button onClick={handleClick}/> */}
+class App extends Component {
+  state = {
+    name: "",
+    quanity: "1",
+    price: "",
+    products: [],
+  }
 
 
+  componentDidMount(){
+    const savedContact = window.localStorage.getItem("products")
 
-   <h1>Автомобілі</h1>
-    <List data={newCars}/>
+    if(savedContact){
+      this.setState({
+        products: JSON.parse(savedContact)
+      })
+    }
+  }
 
+  componentDidUpdate(_, prevState){
+    if(prevState.products !== this.state.products){
+      window.localStorage.setItem("products", JSON.stringify(this.state.products))
+    }
+  }
 
-    </>
-  )
- }
+  handleDelete = (productsId) => {
+    this.setState((prev) => ({
+      products: prev.products.filter(product => product.id !== productsId)
+    }))
+  }
+
+  handleChange = (e) => {
+    const {name, value} = e.target 
+
+    this.setState({[name]: value}) 
+  }
+
+  handleSubmit = (e) => {
+   e.preventDefault()
+
+   const {name, quanity, price} = this.state
+
+    const newProduct = {
+      id: nanoid(),
+      name,
+      quanity: Number(quanity),
+      price: Number(price),
+    }
+
+    this.setState((prev) => ({
+      products: [...prev.products, newProduct],
+      name: "",
+      quanity: 1,
+      price: '',
+    }))
+  }
+
+  render(){
+    const {name, quanity, price,products} = this.state
+    return(
+      <>
+      <Title/>
+      <Form
+      name={name}
+      quanity={quanity}
+      price={price}
+      handleChange={this.handleChange}
+      handleSubmit={this.handleSubmit}
+      />
+
+      <ProductList 
+      products={products}
+      handleDelete={this.handleDelete}
+      />
+      </>
+    )
+  }
+}
+
 
 export default App

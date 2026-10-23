@@ -1,0 +1,72 @@
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  width: 100%;
+  max-width: 440px;
+  margin: 30px auto 40px;
+  padding: 28px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+
+  color: var(--text-h);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  padding: 13px 14px;
+
+  background: var(--input-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.button {
+  width: 100%;
+  margin-top: 4px;
+  padding: 13px;
+
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s, transform 0.2s;
+}
+
+.button:hover {
+  background: var(--accent-hover);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
